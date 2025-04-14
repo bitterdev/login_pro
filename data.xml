@@ -1,4 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <concrete5-cif version="1.0">
+    <themes>
+        <theme handle="login_pro" activated="0" package="login_pro"/>
+    </themes>
 
+    <singlepages>
+        <page name="Login Pro" path="/dashboard/login_pro"
+              filename="/dashboard/login_pro.php"
+              pagetype="" description=""
+              package="login_pro">
+        </page>
+
+        <page name="Settings" path="/dashboard/login_pro/settings"
+              filename="/dashboard/login_pro/settings.php" pagetype="" description=""
+              package="login_pro">
+        </page>
+    </singlepages>
 </concrete5-cif>
