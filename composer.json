@@ -1,0 +1,10 @@
+{
+  "name": "bitter/login_pro",
+  "type": "concrete5-package",
+  "description": "Login Pro for Concrete CMS is a customizable mini-theme that matches your login screens to your site's corporate identity.",
+  "autoload": {
+    "psr-4": {
+      "Bitter\\LoginPro\\": "src/Bitter/LoginPro"
+    }
+  }
+}

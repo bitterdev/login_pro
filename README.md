@@ -1,0 +1,3 @@
+# Login Pro 
+
+Login Pro for Concrete CMS is a powerful mini-theme designed to give you complete control over the appearance of your login and registration pages. It’s more than just a fresh look – with options to customize logos, adjust colors, and match the design to your website’s corporate identity or corporate design, this add-on ensures consistency across all pages. Perfect as a white-label solution, Login Pro is ideal for any website with a login system, allowing you to keep the look and feel in line with your brand. It also provides the option to select which theme will render account pages, offering full flexibility and a unified design experience.
