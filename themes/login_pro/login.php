@@ -1,4 +1,4 @@
-<?php
+<?php /** @noinspection DuplicatedCode */
 
 defined('C5_EXECUTE') or die('Access denied.');
 
@@ -11,17 +11,13 @@ use /** @noinspection PhpDeprecationInspection */
     Concrete\Core\Form\Service\Widget\Attribute;
 use Concrete\Core\Html\Service\Navigation;
 use Concrete\Core\Http\Request;
-use Concrete\Core\Page\Page;
 use Concrete\Core\Site\Service;
 use Concrete\Core\Support\Facade\Application;
-use Concrete\Core\Support\Facade\Url;
 use Concrete\Core\User\User;
 use Concrete\Core\View\View;
 use Concrete\Core\Error\ErrorList\ErrorList;
 use Concrete\Core\Entity\File\File as FileEntity;
 use Concrete\Core\Entity\File\Version;
-use Concrete\Package\LoginPro\Controller as PackageController;
-use Concrete\Core\Package\PackageService;
 
 /** @var User $user */
 /** @var string $authType */
@@ -33,18 +29,19 @@ use Concrete\Core\Package\PackageService;
 
 $app = Application::getFacadeApplication();
 /** @var Form $form */
+/** @noinspection PhpUnhandledExceptionInspection */
 $form = $app->make(Form::class);
 /** @var Navigation $navHelper */
+/** @noinspection PhpUnhandledExceptionInspection */
 $navHelper = $app->make(Navigation::class);
 /** @var Request $request */
+/** @noinspection PhpUnhandledExceptionInspection */
 $request = $app->make(Request::class);
 /** @var Repository $config */
+/** @noinspection PhpUnhandledExceptionInspection */
 $config = $app->make(Repository::class);
-/** @var PackageService $packageService */
-$packageService = $app->make(PackageService::class);
-/** @var PackageController $pkg */
-$pkg = $packageService->getByHandle("login_pro")->getController();
 /** @var Service $siteService */
+/** @noinspection PhpUnhandledExceptionInspection */
 $siteService = $app->make(Service::class);
 $site = $siteService->getSite();
 $siteConfig = $site->getConfigRepository();
@@ -76,32 +73,34 @@ $this->inc('elements/header.php');
 
     <main class="centered">
         <div>
-            <div class="col-sm-12">
-                <?php
-                $logoUrl = $pkg->getRelativePath() . "/images/default_logo.svg";
+            <?php
+            $logoUrl = null;
 
-                $logoFileId = (int)$siteConfig->get("login_pro.regular_logo_file_id", 0);
-                $logoFile = File::getByID($logoFileId);
+            $logoFileId = (int)$siteConfig->get("login_pro.regular_logo_file_id", 0);
+            $logoFile = File::getByID($logoFileId);
 
-                if ($logoFile instanceof FileEntity) {
-                    $logoVersion = $logoFile->getApprovedVersion();
-                    if ($logoVersion instanceof Version) {
-                        $logoUrl = $logoVersion->getRelativePath();
-                    }
+            if ($logoFile instanceof FileEntity) {
+                $logoVersion = $logoFile->getApprovedVersion();
+                if ($logoVersion instanceof Version) {
+                    $logoUrl = $logoVersion->getRelativePath();
                 }
-                ?>
+            }
+            ?>
 
-                <img src="<?php echo h($logoUrl); ?>" alt="<?php echo h(t("Home")); ?>"/>
-            </div>
+            <?php if ($logoUrl !== null) { ?>
+                <div class="col-sm-12">
+                    <img src="<?php echo h($logoUrl); ?>" alt="<?php echo h(t("Home")); ?>"/>
+                </div>
+            <?php } ?>
 
             <div class="col-sm-12">
                 <?php
                 /** @noinspection PhpUnhandledExceptionInspection */
                 View::element('system_errors', [
                     'format' => 'block',
-                    'error' => isset($error) ? $error : null,
-                    'success' => isset($success) ? $success : null,
-                    'message' => isset($message) ? $message : null,
+                    'error' => $error ?? null,
+                    'success' => $success ?? null,
+                    'message' => $message ?? null,
                 ]); ?>
             </div>
 
@@ -110,7 +109,8 @@ $this->inc('elements/header.php');
                 $attribute_helper = new Attribute(); ?>
 
                 <div class="attribute-mode">
-                    <form action="<?php echo View::action('fill_attributes'); ?>" method="post">
+                    <form action="<?php /** @noinspection PhpDynamicAsStaticMethodCallInspection */
+                    echo View::action('fill_attributes'); ?>" method="post">
                         <div data-handle="required_attributes"
                              class="authentication-type authentication-type-required-attributes">
 
@@ -161,6 +161,7 @@ $this->inc('elements/header.php');
                     <?php } ?>
                 </div>
             <?php } ?>
+        </div>
     </main>
 
 <?php

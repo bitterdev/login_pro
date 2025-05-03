@@ -1,3 +1,9 @@
+Version 0.0.2
+==================================================
+- Fix missing clothing html tag in login template
+- Add new marketing dialogs
+- Allow using login/register pages without image
+
 Version 0.0.1
 ==================================================
 - Submitted to PRB

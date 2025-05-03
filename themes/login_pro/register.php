@@ -8,16 +8,14 @@ use Concrete\Core\Entity\Attribute\Key\UserKey;
 use Concrete\Core\Captcha\CaptchaInterface;
 use Concrete\Core\Form\Service\Form;
 use Concrete\Core\Http\Request;
-use Concrete\Core\Page\Page;
 use Concrete\Core\Page\Stack\Stack;
 use Concrete\Core\Site\Service;
 use Concrete\Core\Support\Facade\Application;
 use Concrete\Core\Config\Repository\Repository;
 use Concrete\Core\Support\Facade\Url;
+use Concrete\Core\Validation\CSRF\Token;
 use Concrete\Core\View\View;
 use Concrete\Core\Error\ErrorList\ErrorList;
-use Concrete\Package\LoginPro\Controller as PackageController;
-use Concrete\Core\Package\PackageService;
 use Concrete\Core\File\File;
 use Concrete\Core\Entity\File\File as FileEntity;
 use Concrete\Core\Entity\File\Version;
@@ -37,21 +35,25 @@ use Concrete\Core\Entity\File\Version;
 
 $app = Application::getFacadeApplication();
 /** @var Form $form */
+/** @noinspection PhpUnhandledExceptionInspection */
 $form = $app->make(Form::class);
 /** @var Repository $config */
+/** @noinspection PhpUnhandledExceptionInspection */
 $config = $app->make(Repository::class);
 /** @var Service $siteService */
+/** @noinspection PhpUnhandledExceptionInspection */
 $siteService = $app->make(Service::class);
 $site = $siteService->getSite();
 $siteConfig = $site->getConfigRepository();
 /** @var CaptchaInterface $captcha */
+/** @noinspection PhpUnhandledExceptionInspection */
 $captcha = $app->make(CaptchaInterface::class);
 /** @var Request $request */
+/** @noinspection PhpUnhandledExceptionInspection */
 $request = $app->make(Request::class);
-/** @var PackageService $packageService */
-$packageService = $app->make(PackageService::class);
-/** @var PackageController $pkg */
-$pkg = $packageService->getByHandle("login_pro")->getController();
+/** @var Token $token */
+/** @noinspection PhpUnhandledExceptionInspection */
+$token = $app->make(Token::class);
 
 /** @noinspection PhpUnhandledExceptionInspection */
 $this->inc('elements/header.php');
@@ -61,32 +63,34 @@ $renderer->setContext(new FrontendFormContext());
 
 <main class="centered">
     <div>
-        <div class="col-sm-12">
-            <?php
-            $logoUrl = $pkg->getRelativePath() . "/images/default_logo.svg";
+        <?php
+        $logoUrl = null;
 
-            $logoFileId = (int)$siteConfig->get("login_pro.regular_logo_file_id", 0);
-            $logoFile = File::getByID($logoFileId);
+        $logoFileId = (int)$siteConfig->get("login_pro.regular_logo_file_id", 0);
+        $logoFile = File::getByID($logoFileId);
 
-            if ($logoFile instanceof FileEntity) {
-                $logoVersion = $logoFile->getApprovedVersion();
-                if ($logoVersion instanceof Version) {
-                    $logoUrl = $logoVersion->getRelativePath();
-                }
+        if ($logoFile instanceof FileEntity) {
+            $logoVersion = $logoFile->getApprovedVersion();
+            if ($logoVersion instanceof Version) {
+                $logoUrl = $logoVersion->getRelativePath();
             }
-            ?>
+        }
+        ?>
 
-            <img src="<?php echo h($logoUrl); ?>" alt="<?php echo h(t("Home")); ?>"/>
-        </div>
+        <?php if ($logoUrl !== null) { ?>
+            <div class="col-sm-12">
+                <img src="<?php echo h($logoUrl); ?>" alt="<?php echo h(t("Home")); ?>"/>
+            </div>
+        <?php } ?>
 
         <div class="col-sm-12">
             <?php
             /** @noinspection PhpUnhandledExceptionInspection */
             View::element('system_errors', [
                 'format' => 'block',
-                'error' => isset($error) ? $error : null,
-                'success' => isset($success) ? $success : null,
-                'message' => isset($message) ? $message : null,
+                'error' => $error ?? null,
+                'success' => $success ?? null,
+                'message' => $message ?? null,
             ]); ?>
         </div>
 
@@ -220,9 +224,9 @@ $renderer->setContext(new FrontendFormContext());
 
                 <div class="col-sm-12">
                     <div class="float-right">
-                        <?php echo $form->hidden('rcID', isset($rcID) ? $rcID : ''); ?>
+                        <?php echo $form->hidden('rcID', $rcID ?? ''); ?>
 
-                        <a href="<?php echo (string)Url::to("/"); ?>" class="btn btn-secondary">
+                        <a href="<?php echo Url::to("/"); ?>" class="btn btn-secondary">
                             <?php echo t("Cancel"); ?>
                         </a>
 
@@ -239,7 +243,7 @@ $renderer->setContext(new FrontendFormContext());
 
                     <hr/>
 
-                    <a href="<?php echo (string)Url::to('/login'); ?>" class="btn btn-block btn-secondary">
+                    <a href="<?php echo Url::to('/login'); ?>" class="btn btn-block btn-secondary">
                         <?php echo t("Already have an account?"); ?>
                     </a>
                 </div>

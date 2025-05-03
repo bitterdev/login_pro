@@ -31,6 +31,8 @@ $colorPicker = $app->make(Color::class);
     <?php View::element("dashboard/help", [], "login_pro"); ?>
 </div>
 
+<?php View::element("dashboard/did_you_know", [], "login_pro"); ?>
+
 <form action="#" method="post">´
     <?php echo $token->output("update_settings"); ?>
 
