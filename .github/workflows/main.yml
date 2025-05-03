@@ -59,7 +59,7 @@ jobs:
             echo "File $FILE_PATH not found, skipping upload."
           fi
 
-      - name: Update package in Concrete CMS Marketplace
+      - name: Upload ZIP to Concrete CMS Marketplace
         uses: bitterdev/concrete-package-uploader@v1
         with:
           username: ${{ secrets.CONCRETE_MARKETPLACE_USERNAME }}
