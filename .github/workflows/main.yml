@@ -64,7 +64,7 @@ jobs:
         with:
           username: ${{ secrets.CONCRETE_MARKETPLACE_USERNAME }}
           password: ${{ secrets.CONCRETE_MARKETPLACE_PASSWORD }}
-          packageFile: "release/${PACKAGE_NAME}.zip"
+          packageFile: "release/${{ PACKAGE_NAME }}.zip"
 
       - name: Cleanup trash files and folders
         run: |
